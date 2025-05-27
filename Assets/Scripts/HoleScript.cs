@@ -11,13 +11,4 @@ public class Hole : MonoBehaviour
     {
         gameManager = FindObjectOfType<GameManager>();
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player") && !isBeingShored)
-        {
-            isBeingShored = true;
-            gameManager.StartShoring(this);
-        }
-    }
 }

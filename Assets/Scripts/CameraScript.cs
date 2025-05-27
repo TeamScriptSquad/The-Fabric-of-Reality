@@ -24,13 +24,6 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        if (PlayerScript.isMiniGameActive)
-        {
-            // Отключаем вращение и фиксируем камеру
-            transform.localRotation = Quaternion.Euler(fixedRotation);
-            // Можно ещё зафиксировать позицию, если нужно
-            return;
-        }
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 

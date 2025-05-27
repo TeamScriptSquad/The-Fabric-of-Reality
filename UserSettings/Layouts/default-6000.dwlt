@@ -69,8 +69,8 @@ MonoBehaviour:
     y: 0
     width: 461
     height: 900
-  m_MinSize: {x: 276, y: 76}
-  m_MaxSize: {x: 4001, y: 4026}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 15}
   m_Panes:
   - {fileID: 15}
@@ -272,8 +272,8 @@ MonoBehaviour:
     y: 0
     width: 1149
     height: 654
-  m_MinSize: {x: 202, y: 226}
-  m_MaxSize: {x: 4002, y: 4026}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -374,10 +374,10 @@ MonoBehaviour:
     m_TextWithWhitespace: "Animation\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1920
-    y: 722
-    width: 976
-    height: 216
+    x: 0
+    y: 733
+    width: 1458
+    height: 220
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -391,7 +391,7 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: -10936
+  m_LastSelectedObjectID: 42202
 --- !u!114 &14
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -439,7 +439,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets
+    - Assets/Scripts
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -449,16 +449,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets
+  - Assets/Scripts
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Unity\Projekts\TheFabricOfReality
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 4ca50000
-    m_LastClickedID: 42316
-    m_ExpandedIDs: 000000004ca500004ea5000000ca9a3b
+    m_SelectedIDs: 40a70000
+    m_LastClickedID: 42816
+    m_ExpandedIDs: 000000005ea5000060a5000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -487,7 +487,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000004ca500004ea50000
+    m_ExpandedIDs: 000000005ea5000060a50000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -515,7 +515,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300005caa00000000000018ae0000e6b30000a2b00000d2b10000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -635,7 +635,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 1cfbffff
+      m_ExpandedIDs: 1cfbffffb0a40000bea40000c6a40000daa40000f6a40000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1239,9 +1239,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: -10.867083, y: -67.85674, z: 85.738304}
+    m_Target: {x: 79.98596, y: -104.81311, z: 191.94637}
     speed: 2
-    m_Value: {x: -10.867083, y: -67.85674, z: 85.738304}
+    m_Value: {x: 79.98596, y: -104.81311, z: 191.94637}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1287,13 +1287,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.4270383, y: -0.01844941, z: 0.008714759, w: -0.904018}
+    m_Target: {x: 0.26648223, y: 0.24667257, z: -0.070681125, w: 0.92909}
     speed: 2
-    m_Value: {x: -0.42567617, y: -0.018462218, z: 0.008686959, w: -0.90464556}
+    m_Value: {x: 0.26647368, y: 0.24666466, z: -0.07067886, w: 0.9290602}
   m_Size:
-    m_Target: 67.69476
+    m_Target: 116.07278
     speed: 2
-    m_Value: 67.69476
+    m_Value: 116.07278
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1311,7 +1311,7 @@ MonoBehaviour:
     m_FarClip: 10000
     m_DynamicClip: 1
     m_OcclusionCulling: 0
-  m_LastSceneViewRotation: {x: -0.022983272, y: -0.6171981, z: -0.017378591, w: 0.7867665}
+  m_LastSceneViewRotation: {x: -0.42031798, y: 0.47907716, z: -0.2805968, w: -0.71771526}
   m_LastSceneViewOrtho: 0
   m_Viewpoint:
     m_SceneView: {fileID: 17}

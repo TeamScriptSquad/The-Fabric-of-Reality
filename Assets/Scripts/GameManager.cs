@@ -6,76 +6,108 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
+    public Transform cameraFixedPosition; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅ
+    public Transform cameraFixedRotation; // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Quaternion)
+    public GameObject player; // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    public PlayerScript playerController; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
     public Camera mainCamera;
     public float cameraMoveSpeed = 2f;
-
+    public CameraController cameraController;
     public Canvas miniGameCanvas;
     public Text keysToPressText;
+    public Text interactionHintText; // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ E"
 
     private Hole currentHole;
     private Vector3 originalCameraPosition;
     private Quaternion originalCameraRotation;
+    private Vector3 originalPlayerPosition;
+    private Quaternion originalPlayerRotation;
 
     private List<KeyCode> requiredKeys;
     private List<KeyCode> pressedKeys;
 
     private bool isMiniGameActive = false;
+    private bool isLookingAtHole = false; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ
 
-    private Vector3 playerPosition;
-    private Quaternion playerRotation;
-    public Transform playerTransform;
     void Start()
     {
         miniGameCanvas.gameObject.SetActive(false);
+        interactionHintText.gameObject.SetActive(false);
+    }
+
+    void Update()
+    {
+        if (!isMiniGameActive)
+        {
+            CheckPlayerLookingAtHole();
+
+            if (isLookingAtHole && Input.GetKeyDown(KeyCode.E))
+            {
+                MoveCameraToHole(currentHole.holeTransform.position);
+            }
+        }
+    }
+
+    private void CheckPlayerLookingAtHole()
+    {
+        Ray ray = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
+        RaycastHit hit;
+
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+        int layerMask = LayerMask.GetMask("HoleLayer"); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ "HoleLayer" пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+
+        if (Physics.Raycast(ray, out hit, 10f, layerMask))
+        {
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+            if (hit.transform.CompareTag("Hole")) // пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ
+            {
+                isLookingAtHole = true;
+                currentHole = hit.transform.GetComponent<Hole>();
+                interactionHintText.gameObject.SetActive(true);
+                interactionHintText.text = "E";
+                return;
+            }
+        }
+
+        // пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        isLookingAtHole = false;
+        interactionHintText.gameObject.SetActive(false);
+    }
+
+    private void MoveCameraToHole(Vector3 holePosition)
+    {
         originalCameraPosition = mainCamera.transform.position;
         originalCameraRotation = mainCamera.transform.rotation;
-    }
+        // Р—Р°РїРѕРјРёРЅР°РµРј С‚РµРєСѓС‰РёРµ РїРѕР·РёС†РёРё, С‡С‚РѕР±С‹ РёС… РјРѕР¶РЅРѕ Р±С‹Р»Рѕ РІРѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ
+        Vector3 startCamPos = mainCamera.transform.position;
+        Quaternion startCamRot = mainCamera.transform.rotation;
 
-    public void StartShoring(Hole hole)
-    {
-        if (isMiniGameActive) return;
+        mainCamera.transform.position = cameraFixedPosition.position;
+        mainCamera.transform.rotation = cameraFixedRotation.rotation;
 
-        // сохраняем позицию и поворот игрока
-        playerPosition = playerTransform.position;
-        playerRotation = playerTransform.rotation;
+        if (playerController != null)
+            playerController.enabled = false;
 
-        currentHole = hole;
-        StartCoroutine(MoveCameraToHole(hole.holeTransform.position));
-    }
-
-    private IEnumerator MoveCameraToHole(Vector3 targetPosition)
-    {
-        Vector3 startPos = mainCamera.transform.position;
-        Quaternion startRot = mainCamera.transform.rotation;
-
-        Vector3 targetPos = targetPosition + new Vector3(0, 2, -2);
-        Quaternion targetRot = Quaternion.LookRotation(targetPosition - targetPos);
-
-        float t = 0f;
-        while (t < 1f)
-        {
-            t += Time.deltaTime * cameraMoveSpeed;
-            mainCamera.transform.position = Vector3.Lerp(startPos, targetPos, t);
-            mainCamera.transform.rotation = Quaternion.Slerp(startRot, targetRot, t);
-            yield return null;
-        }
+        var cameraController = mainCamera.GetComponent<CameraController>();
+        if (cameraController != null)
+            cameraController.enabled = false;
 
         StartCoroutine(StartMiniGame());
     }
-
+    
     private IEnumerator StartMiniGame()
     {
-        PlayerScript.isMiniGameActive = true;
+        playerController.StopMovement();
         isMiniGameActive = true;
         miniGameCanvas.gameObject.SetActive(true);
 
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         List<KeyCode> allKeys = new List<KeyCode> {
             KeyCode.A, KeyCode.B, KeyCode.C, KeyCode.D, KeyCode.E, KeyCode.F,
             KeyCode.G, KeyCode.H, KeyCode.I, KeyCode.J, KeyCode.K, KeyCode.L,
             KeyCode.M, KeyCode.N, KeyCode.O, KeyCode.P, KeyCode.Q, KeyCode.R,
             KeyCode.S, KeyCode.T, KeyCode.U, KeyCode.V, KeyCode.W, KeyCode.X,
             KeyCode.Y, KeyCode.Z,
-            KeyCode.Space
         };
 
         requiredKeys = new List<KeyCode>();
@@ -86,13 +118,8 @@ public class GameManager : MonoBehaviour
             allKeys.RemoveAt(index);
         }
 
-        
-
-        // Формируем строку для UI
         string keysString = string.Join(", ", requiredKeys.Select(k => k.ToString()));
 
-
-        // Назначаем текст
         keysToPressText.text = "Press these keys in any order:\n" + keysString;
 
         pressedKeys = new List<KeyCode>();
@@ -110,20 +137,35 @@ public class GameManager : MonoBehaviour
         }
 
         EndMiniGame();
-        TeleportCameraToPlayer();
+        StartCoroutine(MoveCameraBack());
     }
 
     private void EndMiniGame()
     {
-        PlayerScript.isMiniGameActive = false;
+        playerController.ResumeMovement();
+        // Р’РѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ СѓРїСЂР°РІР»РµРЅРёРµ РєР°РјРµСЂРѕР№ Рё РёРіСЂРѕРєРѕРј
+        if (playerController != null)
+            playerController.enabled = true;
+        if (cameraController != null)
+        {
+            cameraController.enabled = true; // РІРѕР·РІСЂР°С‰Р°РµРј СѓРїСЂР°РІР»РµРЅРёРµ
+        }
     }
 
-    private void TeleportCameraToPlayer()
+    private IEnumerator MoveCameraBack()
     {
-        mainCamera.transform.position = playerPosition;
-        mainCamera.transform.rotation = playerRotation;
+        Vector3 startPos = mainCamera.transform.position;
+        Quaternion startRot = mainCamera.transform.rotation;
+        
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.deltaTime * cameraMoveSpeed;
+            mainCamera.transform.position = Vector3.Lerp(startPos, originalCameraPosition, t);
+            mainCamera.transform.rotation = Quaternion.Slerp(startRot, originalCameraRotation, t);
+            yield return null;
+        }
 
-        // отключите мини-игру или выполните любые дополнительные действия
         miniGameCanvas.gameObject.SetActive(false);
         isMiniGameActive = false;
         currentHole.isBeingShored = false;
