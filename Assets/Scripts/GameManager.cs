@@ -14,8 +14,12 @@ public class GameManager : MonoBehaviour
     public float cameraMoveSpeed = 2f;
     public CameraController cameraController;
     public Canvas miniGameCanvas;
-    public Text keysToPressText;
-    public Text interactionHintText; // ��� ��������� "������� E"
+    public Text interactionHintText; 
+
+    public Text key1Text;
+    public Text key2Text;
+    public Text key3Text;
+    public Text key4Text;
 
     private Hole currentHole;
     private Vector3 originalCameraPosition;
@@ -101,6 +105,7 @@ public class GameManager : MonoBehaviour
         isMiniGameActive = true;
         miniGameCanvas.gameObject.SetActive(true);
 
+        interactionHintText.gameObject.SetActive(false);
         // ��������� ������
         List<KeyCode> allKeys = new List<KeyCode> {
             KeyCode.A, KeyCode.B, KeyCode.C, KeyCode.D, KeyCode.E, KeyCode.F,
@@ -118,9 +123,12 @@ public class GameManager : MonoBehaviour
             allKeys.RemoveAt(index);
         }
 
-        string keysString = string.Join(", ", requiredKeys.Select(k => k.ToString()));
+        // Назначение клавиш в отдельные Text поля
+        key1Text.text = requiredKeys[0].ToString();
+        key2Text.text = requiredKeys[1].ToString();
+        key3Text.text = requiredKeys[2].ToString();
+        key4Text.text = requiredKeys[3].ToString();
 
-        keysToPressText.text = "Press these keys in any order:\n" + keysString;
 
         pressedKeys = new List<KeyCode>();
 
@@ -142,6 +150,10 @@ public class GameManager : MonoBehaviour
 
     private void EndMiniGame()
     {
+        if (currentHole != null)
+        {
+            Destroy(currentHole.gameObject); // полностью удаляем дырку
+        }
         playerController.ResumeMovement();
         // Восстановить управление камерой и игроком
         if (playerController != null)
@@ -166,7 +178,7 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
-        miniGameCanvas.gameObject.SetActive(false);
+        Destroy(gameObject);
         isMiniGameActive = false;
         currentHole.isBeingShored = false;
     }
